@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.regex.Pattern
 
 class MainActivity : AppCompatActivity() {
 
@@ -122,11 +123,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun isValidBtn(){
         if (request.isValid()){
-            signInBtn.isEnabled = true
-            signInBtn.setBackgroundResource(R.drawable.bg_btn_active)
+            if (isValidEmail(emailInput.text.toString())) {
+                signInBtn.isEnabled = true
+                signInBtn.setBackgroundResource(R.drawable.bg_btn_active)
+            }
         } else {
             signInBtn.isEnabled = false
             signInBtn.setBackgroundResource(R.drawable.bg_btn_inactive)
         }
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        return Pattern.compile(
+            "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                    + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                    + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                    + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                    + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                    + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
+        ).matcher(email).matches()
     }
 }
